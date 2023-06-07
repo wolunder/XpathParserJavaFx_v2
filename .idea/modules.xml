@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/XpathParserJavaFx.iml" filepath="$PROJECT_DIR$/XpathParserJavaFx.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modulParser/modulParser.iml" filepath="$PROJECT_DIR$/modulParser/modulParser.iml" />
+    </modules>
+  </component>
+</project>

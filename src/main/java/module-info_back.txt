@@ -1,0 +1,12 @@
+module com.example.xpathparserjavafx {
+    requires javafx.controls;
+    requires javafx.fxml;
+    requires poi;
+    requires java.logging;
+    requires org.apache.pdfbox;
+    requires java.xml;
+
+
+    opens com.example.xpathparserjavafx to javafx.fxml;
+    exports com.example.xpathparserjavafx;
+}

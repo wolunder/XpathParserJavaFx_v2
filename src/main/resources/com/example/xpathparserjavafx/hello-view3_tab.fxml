@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="203.0" prefWidth="788.0" style="-fx-background-color: #C0C0C0;" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.xpathparserjavafx.AppControllerTab">
+    <children>
+      <Label prefHeight="17.0" prefWidth="183.0" text="Конвертер xml в excel">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TabPane prefHeight="205.0" prefWidth="788.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab fx:id="tab_egrn" closable="false" text="Выписки ЕГРН">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="85.0" prefWidth="788.0">
+                     <children>
+                        <Label layoutX="14.0" layoutY="4.0" prefHeight="17.0" prefWidth="183.0" text="Введите площадь">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="text_denominator" layoutX="9.0" layoutY="24.0" prefHeight="26.0" prefWidth="306.0" />
+                        <Button fx:id="tab_egrn_btn_file" layoutX="470.0" layoutY="22.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="129.0" style="-fx-background-color: #B0E0E6;" text="Выбрать файл">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Label fx:id="tab_egrn_label_notification" layoutX="9.0" layoutY="57.0" prefHeight="60.0" prefWidth="400.0" textFill="#eb0303">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="tab_egrn_btn_convert" layoutX="469.0" layoutY="121.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="278.0" style="-fx-background-color: #B0E0E6;" text="В Excel">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Label fx:id="tab_egrn_label_notification2" layoutX="329.0" layoutY="18.0" prefHeight="38.0" prefWidth="130.0" textFill="#359638">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="tab_egrn_label_main_notification" layoutX="9.0" layoutY="106.0" prefHeight="60.0" prefWidth="400.0" textFill="#359638">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="tab_egrn_btn_file1" layoutX="617.0" layoutY="22.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="129.0" style="-fx-background-color: #B0E0E6;" text="Выбрать файл 1">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <ChoiceBox fx:id="tab_egrn_choice_type_xml_1" layoutX="470.0" layoutY="63.0" prefHeight="25.0" prefWidth="129.0" style="-fx-background-color: #B0E0E6;" />
+                        <ChoiceBox fx:id="tab_egrn_choice_type_xml_2" layoutX="617.0" layoutY="63.0" prefHeight="25.0" prefWidth="129.0" style="-fx-background-color: #B0E0E6;" />
+                        <CheckBox fx:id="tab_egrn_check_convert_or_compare" layoutX="470.0" layoutY="96.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="275.0" text="Сравнение записей " />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab fx:id="tab_table" closable="false" text="Таблица">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tab_table_table_view" layoutY="19.0" prefHeight="158.0" prefWidth="906.0">
+                          <columns>
+                            <TableColumn fx:id="tab_table_c1" prefWidth="40.000001430511475" text="C1" />
+                            <TableColumn fx:id="tab_table_c2" prefWidth="326.40001678466797" text="C2" />
+                              <TableColumn fx:id="tab_table_c3" minWidth="0.0" prefWidth="408.8000183105469" text="C3" />
+                          </columns>
+                        </TableView>
+                        <ScrollBar fx:id="tab_table_v_scroll" layoutX="767.0" layoutY="19.0" orientation="VERTICAL" prefHeight="159.0" prefWidth="22.0" />
+                        <ScrollBar fx:id="tab_table_h_scroll" layoutY="155.0" prefHeight="22.0" prefWidth="767.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+    </children>
+</AnchorPane>
