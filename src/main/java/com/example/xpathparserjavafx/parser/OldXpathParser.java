@@ -20,7 +20,7 @@ import java.util.List;
 
 public class OldXpathParser {
 
-    public Cad parseXML(Document document, XPath xPath, Cad cad) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException, ParserFormatException {
+    public Cad parseXML(Document document, XPath xPath, Cad cad) throws ParserConfigurationException, IOException, NullPointerException,SAXException, XPathExpressionException, ParserFormatException {
         String expressionCadNumber = "KVZU/Parcels/Parcel";
         String expression1 = "extract_about_property_land/land_record/object/common_data/cad_number";
         NodeList nodeCadNumList = (NodeList) xPath.compile(expressionCadNumber).evaluate(

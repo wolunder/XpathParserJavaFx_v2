@@ -9,6 +9,9 @@ import com.example.xpathparserjavafx.model.RegRecordOwner;
 import com.example.xpathparserjavafx.parser.InterpretationRecords;
 import com.example.xpathparserjavafx.parser.ParserPDF;
 import com.example.xpathparserjavafx.parser.ParserXml;
+import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -91,15 +94,18 @@ public class AppParserController {
     private Cad cad;
     private Cad compareCad;
     private double progress;
-    static double progressBar;
+    private static double progressBar;
+     private static String nameFile = null;
+     private volatile boolean isProgress = false;
 
 
     @FXML
     void initialize() {
         //инициализация интерфейса
-        tab_egrn_label_notification.setText("Выберите файл и введите площадь участка в га, и \nвыберите тип выписки");
+        tab_egrn_label_notification.setText("Выберите файл");
         tab_egrn_label_main_notification.setText("");
         tab_egrn_progress_bar.setStyle("-fx-accent:  #B0E0E6;");
+        tab_egrn_progress_indicator.setVisible(false);
         tab_egrn_progress_indicator.setStyle("-fx-accent:  #B0E0E6;");
         tab_egrn_btn_convert.setDisable(true);
         tab_egrn_btn_file1.setDisable(true);
@@ -154,18 +160,17 @@ public class AppParserController {
         tab_egrn_btn_convert.setOnAction(actionEvent -> {
             try {
                 tab_egrn_label_main_notification.setText("Начинается конвертация");
+                tab_egrn_progress_indicator.setVisible(true);
                 if (!flag) { // конвертация в таблицу
-                    File file = null;
+
                     this.progress = (10.0 / fileList.size()) / 10;//прогрес загрузки
                     for (int i = 0; i < fileList.size(); i++) {
-//                        file = fileList.get(i);
                         this.cad = transformFileToCad(fileList.get(i), this.cad);
-
                         if (cad.isTransfer() != true && cad.getArea().length() > 0) {
                             InterpretationRecords.setFactorDenumerator(cad.getArea().length() - 4);
                         }
+
                         exportFileReport.export(cad);
-                        file = null;
                         increaseProgressParser();
                     }
                 } else { // сравнение по имени правообладателей
@@ -186,27 +191,36 @@ public class AppParserController {
                 tab_egrn_label_main_notification.setText("Файлы на ходятся в \nC:\\конвертированные выписки");
 
             } catch (ParserConfigurationException e) {
-                    tab_egrn_label_notification.setText("Ошибка конвертирования");
+                    tab_egrn_label_notification.setText("Ошибка конвертирования!");
+                    tab_egrn_label_main_notification.setText("Ошибка! В файле:\n"+nameFile);
                 }
                 catch (NullPointerException e){
                     e.printStackTrace();
-                    tab_egrn_label_notification.setText("Ошибка!");
-                    tab_egrn_label_main_notification.setText("Выбран неправильный формат выписки  \nили не выбран совсем. ");
-                }
+                    tab_egrn_label_notification.setText("Ошибка! В файле:\n"+nameFile);
+                    tab_egrn_label_main_notification.setText("Выбран неправильный формат выписки.");
+                }catch (ParserFormatException e){
+                tab_egrn_label_notification.setText("Ошибка! Неверный формат xml.");
+                tab_egrn_label_main_notification.setText("Ошибка! В файле:\n"+nameFile);
+            }
                 catch (FileNotFoundException e) {
                     tab_egrn_label_notification.setText("Ошибка!");
                     tab_egrn_label_main_notification.setText("Файл уже открыт в системе.\n Закройте файл и повторите операцию.");
                 } catch (IOException e) {
                     tab_egrn_label_notification.setText("Ошибка загрузки файла");
+                    tab_egrn_label_main_notification.setText("Ошибка! В файле:\n"+nameFile);
                 } catch (SAXException e) {
                     tab_egrn_label_notification.setText("Ошибка преобразования");
+                    tab_egrn_label_main_notification.setText("Ошибка! В файле:\n"+nameFile);
                 }
                 catch (IllegalArgumentException e){
                     tab_egrn_label_notification.setText("Ошибка программы. Отсутствует файл");
                 }
                 catch (Exception e){
-                    tab_egrn_label_notification.setText("Ошибка!");
-                    tab_egrn_label_main_notification.setText(e.getMessage());
+                    tab_egrn_label_notification.setText("Ошибка! В файле:\n"+nameFile);
+                    e.printStackTrace();
+                    tab_egrn_label_main_notification.setText(e.toString());
+                    tab_egrn_progress_indicator.setProgress(0.5);
+                    tab_egrn_progress_indicator.setStyle("-fx-background-color: #FF0000");
                 } finally {
                 reset();
             }
@@ -246,19 +260,19 @@ public class AppParserController {
         }
         return cad;
     }
-
-    public void reset() {
+    private void reset() {
         this.cad = null;
         this.compareCad = null;
         tab_egrn_btn_convert.setDisable(true);
         tab_egrn_btn_file1.setDisable(true);
         flag = false;
-        tab_egrn_label_notification.setText("Выберите файл и введите площадь участка в га, и \nвыберите тип выписки");
+//        tab_egrn_label_notification.setText("Выберите файл");
         tab_egrn_btn_file.setText("Загрузите файл");
         tab_egrn_btn_file1.setText("Загрузите файл");
         tab_egrn_btn_file.setStyle("-fx-background-color: #B0E0E6");
         tab_egrn_btn_file1.setStyle("-fx-background-color: #B0E0E6");
         tab_egrn_check_convert_or_compare.setSelected(false);
+        System.gc();
     }
 
 }

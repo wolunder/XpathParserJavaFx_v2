@@ -59,8 +59,8 @@
                            </font>
                         </Button>
                         <CheckBox fx:id="tab_egrn_check_convert_or_compare" layoutX="470.0" layoutY="61.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="275.0" text="Сравнение записей " />
-                        <ProgressIndicator fx:id="tab_egrn_progress_indicator" layoutX="381.0" layoutY="30.0" progress="0.0" />
-                        <ProgressBar fx:id="tab_egrn_progress_bar" layoutX="470.0" layoutY="136.0" prefHeight="18.0" prefWidth="278.0" progress="0.0" />
+                        <ProgressIndicator fx:id="tab_egrn_progress_indicator" layoutX="718.0" layoutY="140.0" prefHeight="28.0" prefWidth="34.0" />
+                        <ProgressBar fx:id="tab_egrn_progress_bar" layoutX="470.0" layoutY="136.0" prefHeight="18.0" prefWidth="237.0" progress="0.0" />
                      </children>
                   </AnchorPane>
             </content>

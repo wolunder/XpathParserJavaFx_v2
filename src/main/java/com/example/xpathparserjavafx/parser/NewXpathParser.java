@@ -45,19 +45,36 @@ public class NewXpathParser {
         return cad;
     }
 
-    private List<RegRecordOwner> parserOwnerXML(Document document, XPath xPath, Cad cad) throws XPathExpressionException {
+    private List<RegRecordOwner> parserOwnerXML(Document document, XPath xPath, Cad cad) throws XPathExpressionException, NullPointerException {
         List<RegRecordOwner> listOwner = new ArrayList<>();
         String expression = "extract_about_property_land/right_records/right_record";
+        String expressionParams = "extract_base_params_land/right_records/right_record";
         String expressionCadNumber = "extract_about_property_land/land_record/object/common_data/cad_number";
-        String expessionArea = "extract_about_property_land/land_record/params/area/value";
-        NodeList nodeCad = (NodeList) xPath.compile(expressionCadNumber).evaluate(
-                document, XPathConstants.NODESET);
-        NodeList nodeArea = (NodeList) xPath.compile(expessionArea).evaluate(document, XPathConstants.NODESET);
-        cad.setCadNumber(nodeCad.item(0).getTextContent());
-        cad.setArea(nodeArea.item(0).getTextContent());
+        String expressionCadNumberParams = "extract_base_params_land/land_record/object/common_data/cad_number";
+        String expressionArea = "extract_about_property_land/land_record/params/area/value";
+        String expressionAreaParams = "extract_base_params_land/land_record/params/area/value";
+        NodeList nodeCad = null;
+        NodeList nodeArea = null;
+        NodeList nodeRightList = null;
 
-        NodeList nodeRightList = (NodeList) xPath.compile(expression).evaluate(
-                document, XPathConstants.NODESET);
+        if(document.getDocumentElement().toString().contains("extract_about_property_land")){
+             nodeCad = (NodeList) xPath.compile(expressionCadNumber).evaluate(
+                    document, XPathConstants.NODESET);
+             nodeArea = (NodeList) xPath.compile(expressionArea).evaluate(document, XPathConstants.NODESET);
+            cad.setCadNumber(nodeCad.item(0).getTextContent());
+            cad.setArea(nodeArea.item(0).getTextContent());
+             nodeRightList = (NodeList) xPath.compile(expression).evaluate(
+                    document, XPathConstants.NODESET);
+        }
+        else if(document.getDocumentElement().toString().contains("extract_base_params_land")){
+            nodeCad = (NodeList) xPath.compile(expressionCadNumberParams).evaluate(
+                    document, XPathConstants.NODESET);
+            nodeArea = (NodeList) xPath.compile(expressionAreaParams).evaluate(document, XPathConstants.NODESET);
+            cad.setCadNumber(nodeCad.item(0).getTextContent());
+            cad.setArea(nodeArea.item(0).getTextContent());
+            nodeRightList = (NodeList) xPath.compile(expressionParams).evaluate(
+                    document, XPathConstants.NODESET);
+        }
 
         for (int i = 0; i < nodeRightList.getLength(); i++) {
             Node rightNode = nodeRightList.item(i);
@@ -122,8 +139,16 @@ public class NewXpathParser {
     private List<RegRecordEncumbrance> parserEncumbranceXML(Document document, XPath xPath) throws XPathExpressionException {
 
         String expressionEncumbrance = "extract_about_property_land/restrict_records/restrict_record";
-        NodeList nodeEncumbranceList = (NodeList) xPath.compile(expressionEncumbrance).evaluate(
-                document, XPathConstants.NODESET);
+        String expressionEncumbranceParams = "extract_base_params_land/restrict_records/restrict_record";
+        NodeList nodeEncumbranceList = null;
+        if(document.getDocumentElement().toString().contains("extract_about_property_land")){
+            nodeEncumbranceList = (NodeList) xPath.compile(expressionEncumbrance).evaluate(
+                    document, XPathConstants.NODESET);
+        } else if(document.getDocumentElement().toString().contains("extract_base_params_land")){
+            nodeEncumbranceList = (NodeList) xPath.compile(expressionEncumbranceParams).evaluate(
+                    document, XPathConstants.NODESET);
+        }
+
         List<RegRecordEncumbrance> listEncumbrance = new ArrayList<>(nodeEncumbranceList.getLength());
 
         for (int i = 0; i < nodeEncumbranceList.getLength(); i++) {

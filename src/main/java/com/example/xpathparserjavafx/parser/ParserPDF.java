@@ -23,8 +23,15 @@ public class ParserPDF implements ParserFile {
         String text = textStripper.getText(pdDocument);
         pdDocument.close();
         Cad cad = new Cad();
+        String subArea = null;
 
-        String subArea = text.substring(text.indexOf("Площадь:"), text.indexOf("Кадастровая стоимость,"));
+        if(text.contains("Площадь:")){
+            subArea = text.substring(text.indexOf("Площадь:"), text.indexOf("Кадастровая стоимость,"));
+        }else if(text.contains("Площадь, м2:")){
+            subArea = text.substring(text.indexOf("Площадь, м2:"), text.indexOf("Кадастровая стоимость,"));
+        }
+
+//        String subArea = text.substring(text.indexOf("Площадь:"), text.indexOf("Кадастровая стоимость,"));
         if (subArea.contains("+/-")) {
             subArea = subArea.substring(0, subArea.indexOf("+/-"));
         }

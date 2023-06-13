@@ -27,23 +27,26 @@ public class ParserXml implements ParserFile {
     }
 
     @Override
-    public Cad parseFile(File fileXML) throws IOException, SAXException, ParserConfigurationException, XPathExpressionException, ParserFormatException {
+    public Cad parseFile(File fileXML) throws IOException,NullPointerException, SAXException, ParserConfigurationException, XPathExpressionException, ParserFormatException {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 
         Document document = documentBuilder.parse(fileXML);
         document.getDocumentElement().normalize();
         XPath xPath = XPathFactory.newInstance().newXPath();
-        String endWithDoc = document.getDocumentElement().toString();
+        String startWithDoc = document.getDocumentElement().toString();
         Cad cad = new Cad();
         //выбор парсера по типу выписки
-        if (endWithDoc.contains("KVZU")) {
+        if (startWithDoc.contains("KVZU")) {
             cad = oldXpathParser.parseXML(document, xPath, cad);
-        } else if (endWithDoc.contains("extract_about_property_land")) {
+        } else if (startWithDoc.contains("extract_about_property_land") ||startWithDoc.contains("extract_base_params_land") ) {
             cad = newXpathParser.parseXML(document, xPath, cad);
-        } else if (endWithDoc.contains("extract_transfer_rights_property")) {
+        } else if (startWithDoc.contains("extract_transfer_rights_property") ) {
             cad = transferParser.parseXML(document, xPath, cad);
-        } else {
+        } else if(startWithDoc.contains("extract_base_params_land")){
+            System.out.println("yes");
+        }
+        else {
             throw new ParserFormatException();
         }
         return cad;
