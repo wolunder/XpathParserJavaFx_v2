@@ -9,6 +9,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,13 @@ public class ParserPDF implements ParserFile {
         PDFTextStripper textStripper = new PDFTextStripper();
         String text = textStripper.getText(pdDocument);
         pdDocument.close();
+        System.out.println(text);
+//        try {
+//            docCreate(text);
+//        }catch (IOException e){
+//            e.printStackTrace();
+//        }
+
         Cad cad = new Cad();
         String subArea = null;
 
@@ -104,9 +112,11 @@ public class ParserPDF implements ParserFile {
                     splitArray = splitBuilder.toString().split(",");
                     if (splitArray.length == 4) {
                         splitBuilder = new StringBuilder("");
-                        splitBuilder.append(splitArray[0].substring(splitArray[0].indexOf(" ")) + ", " +
+                        System.out.println(splitArray[0]);
+                        splitBuilder.append("001002000000 "+splitArray[0].substring(splitArray[0].indexOf(" ")) + ", " +
                                 splitArray[2] + " от " + splitArray[3].substring(0, splitArray[3].indexOf(" ")) + ", " +
                                 splitArray[1].trim());
+                        System.out.println( "******* "+splitBuilder);
                         owner.setRegRecord(splitBuilder.toString().trim());
                         owner.setNumberRegistrationRecord(splitArray[2]);
                         // доли
@@ -125,7 +135,7 @@ public class ParserPDF implements ParserFile {
                         owner.setShare(splitArray[1]);
                     }else if(splitArray.length == 3){
                         String record = splitBuilder.toString();
-                        record = record.substring(record.indexOf(" ")+1, record.lastIndexOf(" "));
+                        record = record.substring(record.indexOf(" ")+1, record.lastIndexOf(" ")).replaceAll(",",", ");
                         owner.setRegRecord(record);
                         owner.setNumberRegistrationRecord(splitArray[1]);
                     }
@@ -138,7 +148,8 @@ public class ParserPDF implements ParserFile {
                     String[] arrEncumbrance = subEncumbrance.split("вид:");
 
                     for (String e : arrEncumbrance) {
-                        if (!e.contains("4 Ограничение прав и обременение объекта недвижимости:")) {
+                        //4 Ограничение прав и обременение объекта недвижимости:
+                        if (!e.contains("Ограничение прав и обременение объекта недвижимости:")) {
                             RegRecordEncumbrance regRecordEncumbrance = new RegRecordEncumbrance();
                             //тип аренды
                             String subTypeEncum = e.substring(0, e.indexOf("\n"));
@@ -209,6 +220,15 @@ public class ParserPDF implements ParserFile {
             stringBuilder.append(s + " ");
         }
         return stringBuilder.toString().trim();
+    }
+
+    private void docCreate(String text) throws IOException {
+        String filename = "C:\\test.txt";
+        FileOutputStream fos = new FileOutputStream(filename);
+        fos.write(text.getBytes());
+        fos.flush();
+        fos.close();
+
     }
 }
 

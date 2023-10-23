@@ -2,7 +2,6 @@ package com.example.xpathparserjavafx.parser;
 
 
 import com.example.xpathparserjavafx.model.RegRecordOwner;
-import lombok.Getter;
 
 
 public class InterpretationRecords {
@@ -90,6 +89,26 @@ public class InterpretationRecords {
 
     public static void reset() {
         stringOwner = null;
+    }
+
+    public static String replaceNewlineCharacters(String str) {
+        String[] strArr = splitStringToArray(str);
+        StringBuilder stringBuilder = new StringBuilder("");
+        for (String s : strArr) {
+            stringBuilder.append(s + " ");
+        }
+        return stringBuilder.toString().trim();
+    }
+    private static String [] splitStringToArray(String string){
+        string = string.replaceAll("\\p{Cntrl}","&");
+        return string.contains("&&")? string.split("&&") : string.split("&");
+    }
+    public static String cutSignet(String text, StringBuilder stringBuilder){
+        stringBuilder.append(text.substring(0,text.indexOf(FarmRealEstateLabel.SIGNET)));
+        stringBuilder.append(text.substring((text.indexOf(FarmRealEstateLabel.SIGNET_MARK)+13),text.length()));
+        text = stringBuilder.toString();
+        stringBuilder.setLength(0);
+        return text;
     }
 
 }

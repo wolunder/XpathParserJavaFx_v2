@@ -5,11 +5,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ProgressIndicator?>
-<?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -33,7 +30,7 @@
                            </font>
                         </Label>
                         <TextField fx:id="text_denominator" layoutX="9.0" layoutY="24.0" prefHeight="26.0" prefWidth="306.0" />
-                        <Button fx:id="tab_egrn_btn_file" layoutX="470.0" layoutY="22.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="129.0" style="-fx-background-color: #B0E0E6;" text="Выбрать файл">
+                        <Button fx:id="tab_egrn_btn_file" layoutX="470.0" layoutY="24.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="129.0" style="-fx-background-color: #B0E0E6;" text="Выбрать файл">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -43,7 +40,7 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Button fx:id="tab_egrn_btn_convert" layoutX="468.0" layoutY="90.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="278.0" style="-fx-background-color: #B0E0E6;" text="В Excel">
+                        <Button fx:id="tab_egrn_btn_convert" layoutX="468.0" layoutY="90.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="296.0" style="-fx-background-color: #B0E0E6;" text="В Excel">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -53,34 +50,50 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Button fx:id="tab_egrn_btn_file1" layoutX="617.0" layoutY="22.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="129.0" style="-fx-background-color: #B0E0E6;" text="Выбрать файл 1">
+                        <Button fx:id="tab_egrn_btn_file1" layoutX="618.0" layoutY="23.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="142.0" style="-fx-background-color: #B0E0E6;" text="Выбрать файл 1">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Button>
                         <CheckBox fx:id="tab_egrn_check_convert_or_compare" layoutX="470.0" layoutY="61.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="275.0" text="Сравнение записей " />
-                        <ProgressIndicator fx:id="tab_egrn_progress_indicator" layoutX="718.0" layoutY="140.0" prefHeight="28.0" prefWidth="34.0" />
-                        <ProgressBar fx:id="tab_egrn_progress_bar" layoutX="470.0" layoutY="136.0" prefHeight="18.0" prefWidth="237.0" progress="0.0" />
+                        <ProgressIndicator fx:id="tab_egrn_progress_indicator" layoutX="728.0" layoutY="131.0" prefHeight="28.0" prefWidth="34.0" />
+                        <ProgressBar fx:id="tab_egrn_progress_bar" layoutX="470.0" layoutY="136.0" prefHeight="18.0" prefWidth="255.0" progress="0.0" />
                      </children>
                   </AnchorPane>
             </content>
           </Tab>
-            <Tab fx:id="tab_table" closable="false" text="Таблица">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+            <Tab text="Выписки по правообладателю">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="tab_table_table_view" layoutY="19.0" prefHeight="158.0" prefWidth="906.0">
-                          <columns>
-                            <TableColumn fx:id="tab_table_c1" prefWidth="40.000001430511475" text="C1" />
-                            <TableColumn fx:id="tab_table_c2" prefWidth="326.40001678466797" text="C2" />
-                              <TableColumn fx:id="tab_table_c3" minWidth="0.0" prefWidth="408.8000183105469" text="C3" />
-                          </columns>
-                        </TableView>
-                        <ScrollBar fx:id="tab_table_v_scroll" layoutX="767.0" layoutY="19.0" orientation="VERTICAL" prefHeight="159.0" prefWidth="22.0" />
-                        <ScrollBar fx:id="tab_table_h_scroll" layoutY="155.0" prefHeight="22.0" prefWidth="767.0" />
+                        <Button fx:id="tab_farm_btn_file1" layoutX="25.0" layoutY="17.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="294.0" style="-fx-background-color: #B0E0E6;" text="Выберите файл">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="tab_farm_btn_convert" layoutX="24.0" layoutY="66.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="296.0" style="-fx-background-color: #B0E0E6;" text="В Excel">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Label fx:id="tab_farm_label_main_notification" alignment="TOP_LEFT" layoutX="347.0" layoutY="17.0" prefHeight="73.0" prefWidth="426.0" text="Выберите выписку по правообладателю." textFill="#359638">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="tab_farm_label_error_notification" alignment="TOP_LEFT" layoutX="347.0" layoutY="81.0" prefHeight="73.0" prefWidth="426.0" text="" textFill="#eb0303">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="tab_farm_label_complite_notification" alignment="TOP_LEFT" layoutX="25.0" layoutY="105.0" prefHeight="55.0" prefWidth="295.0" text="" textFill="#359638">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
                      </children>
                   </AnchorPane>
-               </content>
+              </content>
             </Tab>
         </tabs>
       </TabPane>

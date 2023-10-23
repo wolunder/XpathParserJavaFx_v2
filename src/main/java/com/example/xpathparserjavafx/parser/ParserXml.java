@@ -19,11 +19,13 @@ public class ParserXml implements ParserFile {
     private final NewXpathParser newXpathParser;
     private final OldXpathParser oldXpathParser;
     private final TransferRightXpathParser transferParser;
+    private final FarmPropertyXpathParser farmPropertyXpathParser;
 
     public ParserXml() {
         this.newXpathParser = new NewXpathParser();
         this.oldXpathParser = new OldXpathParser();
         this.transferParser = new TransferRightXpathParser();
+        this.farmPropertyXpathParser = new FarmPropertyXpathParser();
     }
 
     @Override
@@ -43,8 +45,8 @@ public class ParserXml implements ParserFile {
             cad = newXpathParser.parseXML(document, xPath, cad);
         } else if (startWithDoc.contains("extract_transfer_rights_property") ) {
             cad = transferParser.parseXML(document, xPath, cad);
-        } else if(startWithDoc.contains("extract_base_params_land")){
-            System.out.println("yes");
+        } else if(startWithDoc.contains("extract_rights_individ_available_real_estate_objects")){
+            cad = farmPropertyXpathParser.parseXml(document,xPath,cad);
         }
         else {
             throw new ParserFormatException();

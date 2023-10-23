@@ -22,43 +22,6 @@ import java.util.List;
 
 public class ExportToExcel {
 
-    private static HSSFCellStyle createCellStyleForTitle(HSSFWorkbook workbook) {
-
-        HSSFFont font = workbook.createFont();
-        font.setBold(true);
-        HSSFCellStyle style = workbook.createCellStyle();
-
-        style.setFont(font);
-        style.setBorderBottom(BorderStyle.THIN);
-        style.setBottomBorderColor(IndexedColors.BLACK.getIndex());
-        style.setBorderLeft(BorderStyle.THIN);
-        style.setLeftBorderColor(IndexedColors.BLACK.getIndex());
-        style.setBorderRight(BorderStyle.THIN);
-        style.setRightBorderColor(IndexedColors.BLACK.getIndex());
-        style.setBorderTop(BorderStyle.THIN);
-        style.setTopBorderColor(IndexedColors.BLACK.getIndex());
-
-        return style;
-    }
-
-    private static HSSFCellStyle createCellStyleForBody(HSSFWorkbook workbook) {
-        HSSFFont font = workbook.createFont();
-        HSSFCellStyle style1 = workbook.createCellStyle();
-
-        style1.setFont(font);
-
-        style1.setBorderBottom(BorderStyle.THIN);
-        style1.setBottomBorderColor(IndexedColors.BLACK.getIndex());
-        style1.setBorderLeft(BorderStyle.THIN);
-        style1.setLeftBorderColor(IndexedColors.BLACK.getIndex());
-        style1.setBorderRight(BorderStyle.THIN);
-        style1.setRightBorderColor(IndexedColors.BLACK.getIndex());
-        style1.setBorderTop(BorderStyle.THIN);
-        style1.setTopBorderColor(IndexedColors.BLACK.getIndex());
-
-        return style1;
-    }
-
     public void createExcelReportCad(Cad cad) throws FileNotFoundException {
 
         HSSFWorkbook excelReportCad = new HSSFWorkbook();
@@ -70,8 +33,8 @@ public class ExportToExcel {
         Cell cell;
         Row row;
 
-        HSSFCellStyle style = createCellStyleForTitle(excelReportCad);
-        HSSFCellStyle styleBody = createCellStyleForBody(excelReportCad);
+        HSSFCellStyle style = ParamExcel.createCellStyleForTitle(excelReportCad);
+        HSSFCellStyle styleBody = ParamExcel.createCellStyleForBody(excelReportCad);
         row = sheet.createRow(rownum);
 
         //хедер таблицы

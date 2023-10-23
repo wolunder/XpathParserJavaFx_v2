@@ -13,8 +13,9 @@ public class CompareXml {
         for (int i = 0; i < newList.size(); i++) {
             for (int j = 0; j < oldList.size(); j++) {
 
-                if (newList.get(i).getRegRecord().replaceAll(" ", "")
-                        .equals(oldList.get(j).getRegRecord().replaceAll(" ", "")) && oldList.get(j).isChangeStatus()) {
+                if (newList.get(i).getRegRecord() != null ||
+                        (newList.get(i).getRegRecord().replaceAll(" ", "")
+                        .equals(oldList.get(j).getRegRecord().replaceAll(" ", "")) && oldList.get(j).isChangeStatus())) {
                     if (newList.get(i).getOwner().contains("Физическое лицо")) {
                         newList.get(i).setOwner(oldList.get(j).getOwner());
                         oldList.get(j).setChangeStatus(false);

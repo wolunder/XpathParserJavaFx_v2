@@ -75,11 +75,12 @@ public class NewXpathParser {
             nodeRightList = (NodeList) xPath.compile(expressionParams).evaluate(
                     document, XPathConstants.NODESET);
         }
-
+        Node rightNode = null;
+        RegRecordOwner owner= null;
         for (int i = 0; i < nodeRightList.getLength(); i++) {
-            Node rightNode = nodeRightList.item(i);
+                rightNode = nodeRightList.item(i);
             if (rightNode.getNodeType() == Node.ELEMENT_NODE) {
-                RegRecordOwner owner = new RegRecordOwner();
+                 owner = new RegRecordOwner();
                 int countNumber = i + 1;
                 owner.setIndexNumber("п. 1." + countNumber);
                 owner.setCadNumber(cad.getCadNumber());

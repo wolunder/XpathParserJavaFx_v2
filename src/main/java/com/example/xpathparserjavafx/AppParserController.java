@@ -6,6 +6,7 @@ import com.example.xpathparserjavafx.exception.ParserFormatException;
 import com.example.xpathparserjavafx.export.ExportFileReport;
 import com.example.xpathparserjavafx.model.Cad;
 import com.example.xpathparserjavafx.model.RegRecordOwner;
+import com.example.xpathparserjavafx.parser.FarmRealEstateParserPDF;
 import com.example.xpathparserjavafx.parser.InterpretationRecords;
 import com.example.xpathparserjavafx.parser.ParserPDF;
 import com.example.xpathparserjavafx.parser.ParserXml;
@@ -29,8 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AppParserController {
-    @FXML
-    private Tab tab_egrn;
 
     @FXML
     private Button tab_egrn_btn_convert;
@@ -43,6 +42,9 @@ public class AppParserController {
 
     @FXML
     private CheckBox tab_egrn_check_convert_or_compare;
+
+//    @FXML
+//    private CheckBox tab_egrn_check_farm_owner;
 
     @FXML
     private Label tab_egrn_label_main_notification;
@@ -60,30 +62,27 @@ public class AppParserController {
     private ProgressIndicator tab_egrn_progress_indicator;
 
     @FXML
-    private Tab tab_table;
-
-    @FXML
-    private TableColumn<?, ?> tab_table_c1;
-
-    @FXML
-    private TableColumn<?, ?> tab_table_c2;
-
-    @FXML
-    private TableColumn<?, ?> tab_table_c3;
-
-    @FXML
-    private ScrollBar tab_table_h_scroll;
-
-    @FXML
-    private TableView<?> tab_table_table_view;
-
-    @FXML
-    private ScrollBar tab_table_v_scroll;
-
-    @FXML
     private TextField text_denominator;
+
+
+    @FXML
+    private Button tab_farm_btn_convert;
+
+    @FXML
+    private Button tab_farm_btn_file1;
+
+    @FXML
+    private Label tab_farm_label_complite_notification;
+
+    @FXML
+    private Label tab_farm_label_error_notification;
+
+    @FXML
+    private Label tab_farm_label_main_notification;
+
     private ParserXml parserXml = new ParserXml();
     private ParserPDF parserPDF = new ParserPDF();
+    private FarmRealEstateParserPDF farmRealEstateParserPDF = new FarmRealEstateParserPDF();
     private CompareXml compareXml = new CompareXml();
     private ExportFileReport exportFileReport = new ExportFileReport();
     private List<File> fileList;
@@ -91,12 +90,12 @@ public class AppParserController {
     private List<RegRecordOwner> listRecords;
     private List<RegRecordOwner> compareListRecords;
     private boolean flag = false;
-    private Cad cad;
+    private Cad cad = new Cad();
     private Cad compareCad;
     private double progress;
     private static double progressBar;
      private static String nameFile = null;
-     private volatile boolean isProgress = false;
+     private boolean isFarmEstate = false;
 
 
     @FXML
@@ -109,6 +108,7 @@ public class AppParserController {
         tab_egrn_progress_indicator.setStyle("-fx-accent:  #B0E0E6;");
         tab_egrn_btn_convert.setDisable(true);
         tab_egrn_btn_file1.setDisable(true);
+        tab_farm_btn_convert.setDisable(true);
         FileChooser fileChooser1 = new FileChooser();
         fileChooser1.setTitle("Выберите XML файл");
         // выбор типа преобразования
@@ -117,7 +117,6 @@ public class AppParserController {
 
             if (this.flag) {
                 tab_egrn_btn_file1.setDisable(false);
-
             } else {
                 tab_egrn_btn_convert.setDisable(true);
                 tab_egrn_btn_file1.setDisable(true);
@@ -136,6 +135,7 @@ public class AppParserController {
             fileList = createListFileChoicer(fileList, fileChooser1, this.flag);
 
             if ( fileList != null) {
+
                 tab_egrn_btn_file.setText("Загружен");
                 tab_egrn_label_notification.setText("");
                 tab_egrn_label_main_notification.setText("Загружено файлов: " + fileList.size() + ".");
@@ -162,22 +162,21 @@ public class AppParserController {
                 tab_egrn_label_main_notification.setText("Начинается конвертация");
                 tab_egrn_progress_indicator.setVisible(true);
                 if (!flag) { // конвертация в таблицу
-
                     this.progress = (10.0 / fileList.size()) / 10;//прогрес загрузки
                     for (int i = 0; i < fileList.size(); i++) {
-                        this.cad = transformFileToCad(fileList.get(i), this.cad);
-                        if (cad.isTransfer() != true && cad.getArea().length() > 0) {
-                            InterpretationRecords.setFactorDenumerator(cad.getArea().length() - 4);
-                        }
+                        this.cad = transformFileToCad(fileList.get(i), this.cad,false);
 
-                        exportFileReport.export(cad);
-                        increaseProgressParser();
+                            if (cad.isTransfer() != true && cad.getArea().length() > 0) {
+                                InterpretationRecords.setFactorDenumerator(cad.getArea().length() - 4);
+                                exportFileReport.export(cad);
+                                increaseProgressParser();
+                            }
                     }
                 } else { // сравнение по имени правообладателей
                     // file1
-                    this.cad = transformFileToCad(this.fileList.get(0), this.cad);
+                    this.cad = transformFileToCad(this.fileList.get(0), this.cad,false);
                     //file2
-                    this.compareCad = transformFileToCad(this.compareFileList.get(0), this.compareCad);
+                    this.compareCad = transformFileToCad(this.compareFileList.get(0), this.compareCad,false);
 
                     if (this.compareCad.isTransfer()) {
                         this.cad.setListOwner(compareXml.compareTransferListAndRegRecordList(compareCad.getListOwner(), cad.getListOwner()));
@@ -188,21 +187,19 @@ public class AppParserController {
                     tab_egrn_progress_indicator.setProgress(1.0);
                     tab_egrn_progress_bar.setProgress(1.0);
                 }
-                tab_egrn_label_main_notification.setText("Файлы на ходятся в \nC:\\конвертированные выписки");
+                tab_egrn_label_main_notification.setText("Файлы находятся в \nC:\\конвертированные выписки");
 
             } catch (ParserConfigurationException e) {
                     tab_egrn_label_notification.setText("Ошибка конвертирования!");
                     tab_egrn_label_main_notification.setText("Ошибка! В файле:\n"+nameFile);
-                }
-                catch (NullPointerException e){
+                } catch (NullPointerException e){
                     e.printStackTrace();
                     tab_egrn_label_notification.setText("Ошибка! В файле:\n"+nameFile);
                     tab_egrn_label_main_notification.setText("Выбран неправильный формат выписки.");
                 }catch (ParserFormatException e){
                 tab_egrn_label_notification.setText("Ошибка! Неверный формат xml.");
                 tab_egrn_label_main_notification.setText("Ошибка! В файле:\n"+nameFile);
-            }
-                catch (FileNotFoundException e) {
+            } catch (FileNotFoundException e) {
                     tab_egrn_label_notification.setText("Ошибка!");
                     tab_egrn_label_main_notification.setText("Файл уже открыт в системе.\n Закройте файл и повторите операцию.");
                 } catch (IOException e) {
@@ -226,7 +223,61 @@ public class AppParserController {
             }
         });
 
+        //выписка по правообладателю
+        tab_farm_btn_file1.setOnAction(actionEvent -> {
+            this.fileList = createListFileChoicer(fileList, fileChooser1, true);
 
+            if ( this.fileList.get(0) != null) {
+                tab_farm_btn_file1.setText("Загружен");
+                tab_farm_label_main_notification.setText("");
+                tab_farm_label_main_notification.setText("Загружено файл: " + fileList.size() + ".");
+                tab_farm_btn_file1.setStyle("-fx-background-color: #F0E68C");
+                tab_farm_btn_convert.setDisable(false);
+            }
+        });
+
+        tab_farm_btn_convert.setOnAction( actionEvent -> {
+            tab_farm_label_complite_notification.setText("");
+            tab_farm_label_error_notification.setText("");
+            tab_farm_label_main_notification.setText("Загрузите выписку по правообладателю.");
+
+            try {
+                this.cad = transformFileToCad(this.fileList.get(0),this.cad, true);
+                this.cad.setFarmRealEstate(true);
+                exportFileReport.export(this.cad);
+                tab_farm_label_complite_notification.setText("Готово!");
+                tab_farm_label_main_notification.setText("Файл находится в C:\\конвертированные выписки");
+
+            }catch(FileNotFoundException e){
+                tab_farm_label_complite_notification.setText("Ошибка!");
+                tab_farm_label_error_notification.setText("Файл уже открыт в системе.\n Закройте файл и повторите операцию.");
+            }  catch (XPathExpressionException e) {
+                tab_farm_label_complite_notification.setText("Ошибка!");
+            } catch (ParserConfigurationException e) {
+                tab_farm_label_complite_notification.setText("Ошибка! Неверный формат xml.");
+                tab_farm_label_error_notification.setText("Ошибка! В файле:\n"+nameFile);
+            } catch (ParserFormatException e) {
+                tab_farm_label_complite_notification.setText("Ошибка! Неверный формат xml.");
+                tab_farm_label_error_notification.setText("Ошибка! В файле:\n"+nameFile);
+            } catch (SAXException e) {
+                tab_farm_label_complite_notification.setText("Ошибка преобразования");
+                tab_farm_label_error_notification.setText("Ошибка! В файле:\n"+nameFile);
+            }catch (NullPointerException e){
+                tab_farm_label_complite_notification.setText("Ошибка! В файле:\n"+nameFile);
+                tab_farm_label_error_notification.setText("Выбран неправильный формат выписки.");
+            }catch (IOException e) {
+                tab_farm_label_complite_notification.setText("Ошибка преобразования");
+                tab_farm_label_error_notification.setText("Ошибка! В файле:\n"+nameFile);
+            }catch (Exception e){
+                tab_farm_label_complite_notification.setText("Ошибка! В файле:\n"+nameFile);
+                tab_farm_label_error_notification.setText(e.getMessage());
+            }finally {
+                tab_farm_btn_file1.setText("Выбрать файл");
+                tab_farm_btn_file1.setStyle("-fx-background-color:  #B0E0E6");
+                tab_farm_btn_convert.setDisable(true);
+                System.gc();
+            }
+        });
     }
 
     private List<File> createListFileChoicer(List<File> fileList, FileChooser fileChooser, boolean isCompare) {
@@ -252,11 +303,16 @@ public class AppParserController {
         tab_egrn_progress_indicator.setProgress(progressBar);
     }
 
-    private Cad transformFileToCad(File file, Cad cad) throws IOException, XPathExpressionException, ParserConfigurationException, ParserFormatException, SAXException {
+    private Cad transformFileToCad(File file, Cad cad,boolean isFarmEstate) throws IOException, XPathExpressionException, ParserConfigurationException, ParserFormatException, SAXException {
         if (file.getName().endsWith(".xml")) {
             cad = parserXml.parseFile(file);
         } else if (file.getName().endsWith(".pdf")) {
-            cad = parserPDF.parseFile(file);
+            if(!isFarmEstate){
+                cad = parserPDF.parseFile(file);
+            }else {
+                cad = farmRealEstateParserPDF.parseFile(file);
+                cad.setFarmRealEstate(isFarmEstate);
+            }
         }
         return cad;
     }
